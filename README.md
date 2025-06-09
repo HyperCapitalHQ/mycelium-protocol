@@ -1,2 +1,2 @@
 # mycelium-protocol
-We launch a protocol to innovate cooperations more faster 
+We launch a protocol to innovate cooperations more faster and diversity.
