@@ -12,8 +12,10 @@
 
 
 
-对于应用交互的技术选型,我们看到了一个精巧的后端框架:https://github.com/bknd-io/bknd,而我们计划使用Tauri作为跨端的壳,当然最基础的是Web应用,然后迁移到Tauri,发布到多端。我的疑问是这个后端框架包括了client、后端、UI、element,是否可以实现在Tauri内运行,并对外提供API服务,对内nodejs实现一些基础服务,而另外一些服务,一来Rust来调用硬件实现,请评估此选型方案
+对于应用交互的技术选型,我们看到了一个精巧的后端框架:https://github.com/bknd-io/bknd,
+而我们计划使用Tauri作为跨端的壳,当然最基础的是Web应用,然后迁移到Tauri,发布到多端。我的疑问是这个后端框架包括了client、后端、UI、element,是否可以实现在Tauri内运行,并对外提供API服务,对内nodejs实现一些基础服务,而另外一些服务,一来Rust来调用硬件实现,请评估此选型方案
 我来分析一下这个技术选型方案。首先让我了解一下这个后端框架的具体情况。让我进一步了解bknd在Tauri环境中的运行可能性：基于对bknd框架和Tauri架构的分析，我来评估你的这个技术选型方案：
+https://docs.bknd.io/start
 
 ## 技术可行性分析
 
