@@ -1,6 +1,7 @@
-# Cooperation Economics: New Technology + New Economy = New Era
+# Mycelium Economics: From Platform Monopoly to Cooperation Innovation 
 我们有一篇大概探讨了垄断和协作的经济学思考，这里我们来从新技术+新经济=新时代的视角，
 来探讨垄断和协作的经济学思考。
+New Technology + New Economy = New Era
 
 ## 互联网和平台经济回顾
 从最早的Windows下风靡的Excel办公软件开始，信息技术进入了单机PC时代，而Linux提供了近似于零成本的
