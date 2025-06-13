@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mycelium协议 - MushroomDAO白皮书</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 蘑菇背景装饰 */
+        .mushroom-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .mushroom {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .mushroom:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            font-size: 60px;
+            animation-delay: 0s;
+        }
+
+        .mushroom:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            font-size: 40px;
+            animation-delay: 1s;
+        }
+
+        .mushroom:nth-child(3) {
+            bottom: 30%;
+            left: 10%;
+            font-size: 50px;
+            animation-delay: 2s;
+        }
+
+        .mushroom:nth-child(4) {
+            bottom: 15%;
+            right: 5%;
+            font-size: 70px;
+            animation-delay: 3s;
+        }
+
+        .mushroom:nth-child(5) {
+            top: 50%;
+            left: 2%;
+            font-size: 35px;
+            animation-delay: 4s;
+        }
+
+        .mushroom:nth-child(6) {
+            top: 70%;
+            right: 15%;
+            font-size: 45px;
+            animation-delay: 5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 头部标题 */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header h2 {
+            font-size: 1.8rem;
+            opacity: 0.9;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* 卡片网格 */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        }
+
+        /* 插画容器 */
+        .illustration {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .illustration.whitepaper {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .illustration.milestone {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .illustration.gtoken {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .illustration.dao {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        /* 卡片内容 */
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .card p {
+            color: #5a6c7d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-link {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+            text-align: center;
+        }
+
+        .card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header h2 {
+                font-size: 1.4rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .illustration {
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
+            }
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            color: rgba(255,255,255,0.8);
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: rgba(255,255,255,0.8);
+            font-size: 24px;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #4ecdc4;
+        }
+    </style>
+</head>
+<body>
+    <!-- 蘑菇背景装饰 -->
+    <div class="mushroom-bg">
+        <div class="mushroom">🍄</div>
+        <div class="mushroom">🍄</div>
+        <div class="mushroom">🍄</div>
+        <div class="mushroom">🍄</div>
+        <div class="mushroom">🍄</div>
+        <div class="mushroom">🍄</div>
+    </div>
+
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>Mycelium Protocol</h1>
+            <h2>MushroomDAO 白皮书</h2>
+            <p style="margin-top: 20px; font-size: 1.1rem; opacity: 0.8;">
+                构建去中心化协作生态，连接万物如菌丝网络
+            </p>
+        </header>
+
+        <!-- 卡片网格 -->
+        <div class="cards-grid">
+            <!-- 白皮书卡片 -->
+            <div class="card">
+                <div class="illustration whitepaper">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10,9 9,9 8,9"/>
+                    </svg>
+                </div>
+                <h3>白皮书</h3>
+                <p>深入探讨社会问题与解决方案，包含技术架构、商业模式和实施路径的完整研究文档。涵盖我们对去中心化协作的思考与技术创新。</p>
+                <a href="whitepaper.md" class="card-link">查看白皮书</a>
+            </div>
+
+            <!-- 里程碑卡片 -->
+            <div class="card">
+                <div class="illustration milestone">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <h3>里程碑</h3>
+                <p>协议发展的关键节点与目标规划，从基础设施建设到开放花园生态的完整路线图。秉持开放态度，构建可持续发展的协作平台。</p>
+                <a href="milestones.md" class="card-link">查看里程碑</a>
+            </div>
+
+            <!-- GToken卡片 -->
+            <div class="card">
+                <div class="illustration gtoken">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+                <h3>GToken</h3>
+                <p>创新的代币经济体系，包括治理代币和开放的OpenPNTs协议。支持任何组织和个体发行自己的代币，以及基于协议的mPNTs机制。</p>
+                <a href="gtoken.md" class="card-link">了解GToken</a>
+            </div>
+
+            <!-- DAO卡片 -->
+            <div class="card">
+                <div class="illustration dao">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3>DAO</h3>
+                <p>去中心化自治组织的架构设计与治理模式，构建协作与互操作的协议体系。实现真正的社区自治与价值共创。</p>
+                <a href="dao.md" class="card-link">探索DAO</a>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p><strong>Mycelium Protocol</strong></p>
+            <p>像菌丝网络一样连接世界，构建去中心化的协作未来</p>
+            <div class="social-links">
+                <a href="#" title="GitHub">💻</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Discord">💬</a>
+                <a href="#" title="Telegram">📱</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // 添加一些交互动画
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            // 为卡片添加进入动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+
+            // 为插画添加悬停动画
+            const illustrations = document.querySelectorAll('.illustration');
+            illustrations.forEach(illustration => {
+                illustration.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1) rotate(5deg)';
+                });
+                
+                illustration.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                });
+            });
+
+            // 为蘑菇添加随机动画
+            const mushrooms = document.querySelectorAll('.mushroom');
+            mushrooms.forEach(mushroom => {
+                const randomDelay = Math.random() * 2;
+                const randomDuration = 4 + Math.random() * 4;
+                mushroom.style.animationDelay = randomDelay + 's';
+                mushroom.style.animationDuration = randomDuration + 's';
+            });
+        });
+
+        // 平滑滚动效果
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
