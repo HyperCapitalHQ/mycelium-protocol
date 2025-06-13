@@ -20,6 +20,15 @@ Chainlink和ZKPass等团队基于经济和技术的关系，预见未来需要�
 
 看到ZKTLS有感记录的研究idea。
 
+more：
+Founded in 2013, the non-profit project TLSNotary introduced a novel approach to solving the problem: MPC-TLS. This method uses secure multi-party computation (MPC) to add a verifier to the TLS connection. Through cryptographic guarantees provided by MPC, the verifier can validate TLS records without requiring external trust or exposing the complete data to anyone.
+
+We believe that the greatest contribution of TLSNotary lies in its successful engineering and open-sourcing of the concept of introducing a third-party notary/verifier using MPC technology, specifically Garbled Circuits. This innovation laid the groundwork for the subsequent development of zkTLS, advancing the possibilities for privacy-preserving and verifiable data solutions.
+
+
 ## Reference
 https://telah.vc/zktls
+https://medium.com/zkpass/zktls-the-cornerstone-of-verifiable-internet-da8609a32754
+https://tlsnotary.org/
+https://github.com/tlsnotary
 https://medium.com/@yasu.block/%E4%BD%BF%E7%94%A8-zktls-%E8%AF%81%E6%98%8E%E6%96%B0%E4%B8%96%E7%95%8C-3e93ff2386e4
